@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { MDBContainer } from 'mdbreact';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Header from './components/Header';
+import Loader from './components/Loader';
+import AllStatus from './pages/AllStatus';
 
 function App() {
+  const dispatch = useDispatch()
+  const isLoading = useSelector(state => state.loading)
+
+  useEffect(() => {
+    dispatch({ type: 'getData' })
+  }, [dispatch])
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MDBContainer fluid className="px-0">
+      <Header />
+      {
+        isLoading ? <Loader /> : <AllStatus />
+      }
+    </MDBContainer>
   );
 }
 
