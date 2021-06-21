@@ -1,21 +1,21 @@
-export const dataReducer = (state = [], action) => {
-    const {type, payload} = action
-    switch (type) {
-        case 'DATA_REQUEST_SUCCESS':
-            return payload
-        default:
-            return state
-    }
+import { ACTIONS } from "../actions/actions"
+
+const initialState = {
+    data: [],
+    error: null,
+    isLoading: false
 }
 
-export const loadingReducer  = (state = true, action) => {
-    const { type } = action
+export const dataReducer = (state = initialState, action) => {
+    const { type, payload } = action
     switch (type) {
-        case 'loading':
-            return true
-        case 'notLoading':
-            return false
+        case ACTIONS.REQUEST_SUCCESS:
+            return { ...state, data: payload, isLoading: false }
+        case ACTIONS.REQUEST_LOADING:
+            return { ...state, isLoading: true }
+        case ACTIONS.REQUEST_ERROR:
+            return { ...state, error: payload, isLoading: false }
         default:
-            return state;
+            return state
     }
 }

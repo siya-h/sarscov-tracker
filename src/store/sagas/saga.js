@@ -1,27 +1,25 @@
 import axios from 'axios'
 import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { dataRequestError, dataRequestLoading, dataRequestSuccess, WATCH_ACTIONS } from '../actions/actions'
 
-export function* getDataRequest(){
+export function* getDataRequest() {
     try {
-        // yield put({type: 'loading'})
-        const { data } = yield call(() => axios.get('https://api.covid19api.com/live/country/south-africa/status/confirmed'))
-        yield put({type: 'DATA_REQUEST_SUCCESS', payload: data})
-
+        yield put(dataRequestLoading())
+        const { data } = yield call(() => axios.get(process.env.REACT_APP_SA_CONFIRMED_LIVE_ALL))
+        yield put(dataRequestSuccess(data))
     }
-    catch(error){
+    catch (error) {
+        yield put(dataRequestError(error))
         console.log(error)
-    }
-    finally{
-        yield put({type: 'notLoading'})
     }
 }
 
-export function* watchGetDataRequest(){
-    yield takeEvery('getData',  getDataRequest)
+export function* watchGetDataRequest() {
+    yield takeEvery(WATCH_ACTIONS.GET_DATA, getDataRequest)
 }
 
 export function* rootSaga() {
     yield all([
         getDataRequest()
     ])
-  }
+}

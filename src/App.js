@@ -4,20 +4,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import Header from './components/Header';
 import Loader from './components/Loader';
 import AllStatus from './pages/AllStatus';
+import { getData } from './store/actions/actions';
 
 function App() {
   const dispatch = useDispatch()
-  const isLoading = useSelector(state => state.loading)
-
+  const { isLoading, error } = useSelector(state => state.data)
   useEffect(() => {
-    dispatch({ type: 'getData' })
+    dispatch(getData())
   }, [dispatch])
   
   return (
     <MDBContainer fluid className="px-0">
       <Header />
       {
-        isLoading ? <Loader /> : <AllStatus />
+        isLoading ? <Loader /> : error ? <h1>Error Loading Data</h1> : <AllStatus />
       }
     </MDBContainer>
   );
